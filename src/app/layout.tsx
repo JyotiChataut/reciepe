@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Reciepe App",
-  description: "Food reciepe app built with Next.js",
+  title: "Receipe App",
+  description: "Food receipe app built with Next.js",
 };
 
 export default function RootLayout({

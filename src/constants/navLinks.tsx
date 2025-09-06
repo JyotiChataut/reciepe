@@ -1,32 +1,45 @@
 const navLinks =[
   {
     route:"/",
-    label:"Home"
+    label:"Home",
+    isAuth:false
   },
    {
     route:"/contact",
-    label:"contact"
+    label:"contact",
+      isAuth:false
   },
    {
     route:"/features",
-    label:"features"
+    label:"features",  isAuth:false
   },
+
+
    {
-    route:"/pricing",
-    label:"pricing"
+    route:"/receipe",
+    label:"receipe",
+    isAuth:true,
+
+       
   },
+
+  
    {
     route:"/more",
+      isAuth:false,
     label:"more",
+    
     subMenu: [
         {
-        route:"/resturants",
+        route:"/more/resturants",
         label:"resturants",
+          
         },
 
         {
-        route:"/chefs",
+        route:"/more/chefs",
         label:"chefs",
+          
         },
     ],
   },

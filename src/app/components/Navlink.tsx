@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation';
 import { useState } from 'react'
 import * as React from 'react';
 
@@ -16,32 +17,46 @@ type NavLinkProps = {
   subMenu?: SubMenu[];
 };
 
-function Navlink(navLinks: NavLinkProps): React.JSX.Element {
-  const [showDropdown, setShowDropdown] = useState(false);
-  return (
-    <li>
-      <Link
-        href={navLinks.route}
-        className="block relative py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-        onClick={() => {
-          if ((navLinks.subMenu?.length ?? 0) > 0)
-            setShowDropdown(!showDropdown);
-        }}
-      >
-        {navLinks.label}
+type isAuthProps = {
+  isAuth: boolean;
+};
 
+function Navlink(props: NavLinkProps & isAuthProps) {
+  const { label, route, subMenu, isAuth } = props;
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const pathname = usePathname();
+
+  const isActive =pathname == route || ( route!=='/' &&pathname.startsWith(route));
+  
+  
+  return (
+    <li className="relative"
+    
+    onMouseEnter={() => {
+          if ((subMenu?.length ?? 0) > 0) setShowDropdown(true);
+           
+        }}
+        onMouseLeave={()=>(setShowDropdown(false))}>
+      <Link
+        href={route}
+        className={` ${isActive?'text-blue-700 dark:text-blue-500': ' text-gray-900 dark:text-white'} block py-2 px-3 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0  md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent`}
+       
+      >
+        {label}
+      </Link>
         <div>
-          {(navLinks.subMenu?.length ?? 0) > 0 ? (
+          {(subMenu?.length ?? 0) > 0 ? (
             <div
               className={` ${
                 showDropdown ? "block" : "hidden"
-              } absolute top-10 z-10   font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600`}
+              } absolute top-6 z-10   font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600`}
             >
               <ul
                 className=" py-2 text-sm text-gray-700 dark:text-gray-400"
                 aria-labelledby="dropdownLargeButton"
               >
-                {navLinks.subMenu?.map((subMenu, index) => (
+                {subMenu?.map((subMenu, index) => (
                   <li key={index}>
                     <Link
                       href={subMenu.route}
@@ -55,7 +70,7 @@ function Navlink(navLinks: NavLinkProps): React.JSX.Element {
             </div>
           ) : null}
         </div>
-      </Link>
+      
     </li>
   );
 }

@@ -1,7 +1,7 @@
 'use client';
 import { useRouter } from "next/navigation";
 
-export default function AddReceipePage() {
+export default function AddRecipePage() {
   const router = useRouter();
 
   // small cookie helpers
@@ -17,8 +17,8 @@ export default function AddReceipePage() {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
 
-    const receipe = {
-      id: Date.now(), // unique numeric id for custom receipes
+    const recipe = {
+      id: Date.now(), // unique numeric id for custom recipes
       name: String(fd.get("mealName") || "").trim(),
       category: String(fd.get("category") || "").trim() || "Custom",
       ingredients: String(fd.get("ingredients") || "").trim(),
@@ -27,17 +27,18 @@ export default function AddReceipePage() {
     };
 
     try {
-      const existing = JSON.parse(getCookie("customReceipes") || "[]");
-      setCookie("customReceipes", JSON.stringify([receipe, ...existing]));
+      const existing = JSON.parse(getCookie("customRecipes") || "[]");
+      setCookie("customRecipes", JSON.stringify([recipe, ...existing]));
     } catch {
-      setCookie("customReceipes", JSON.stringify([receipe]));
+      setCookie("customRecipes", JSON.stringify([recipe]));
     }
 
     router.push("/receipe");
   };
 
   return (
-    <div>
+    <div className="py-8">
+      <h1 className="text-2xl font-bold mb-6">Add New Recipe</h1>
       <form className="max-w-sm mx-auto" onSubmit={onSubmit}>
         <div className="mb-5">
           <label htmlFor="mealName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Meal Name</label>
@@ -59,12 +60,21 @@ export default function AddReceipePage() {
           <textarea name="procedure" id="procedure" rows={4} placeholder="Type Procedure here..." className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
         </div>
 
-        <button
-          type="submit"
-          className="inline-flex w-fit items-center self-start justify-self-start text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900"
-        >
-          Add Receipe
-        </button>
+        <div className="flex gap-4">
+          <button
+            type="submit"
+            className="inline-flex w-fit items-center text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5"
+          >
+            Add Recipe
+          </button>
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="inline-flex w-fit items-center text-white bg-gray-500 hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5"
+          >
+            Cancel
+          </button>
+        </div>
       </form>
     </div>
   );
